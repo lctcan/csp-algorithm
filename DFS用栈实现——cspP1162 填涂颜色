@@ -1,0 +1,92 @@
+#include<stdio.h>
+#define MAX 35
+typedef struct
+{
+    int x;
+    int y;
+}Point;
+int net[MAX][MAX];   //初始化网格
+Point stack[MAX*MAX];    //用栈实现深度搜索
+int top = -1; //表示top = -1栈空
+int dx[4] = {-1, 1, 0, 0};  //方向数组
+int dy[4] = {0, 0, 1, -1};
+int visited[MAX][MAX] = {0};
+int n;
+
+void push(int x, int y)   //进栈
+{
+    top++;
+    stack[top].x = x;
+    stack[top].y = y;
+}
+Point pop()  //出栈
+{
+    Point temp = stack[top];     // 等价return stack[top--]
+    top--;
+    return temp;
+}
+void dfs_stack(int start_x, int start_y) //核心算法
+{
+    push(start_x, start_y);
+    visited[start_x][start_y] =1;
+    while(top != -1)
+    {
+        Point current = pop();
+        int x = current.x;
+        int y =current.y;
+        for(int i = 0;i < 4; i++)    //四个方向遍历
+        {
+            int nx = x + dx[i];
+            int ny = y + dy[i];
+            if( nx >=0 && nx < n && ny >= 0 && ny < n &&           //网格是0且未被访问的进栈
+                net[nx][ny] == 0 && visited[nx][ny] != 1)
+            {
+                push(nx, ny);
+                visited[nx][ny] = 1;
+            }
+        }
+    }
+}
+int main()
+{
+    scanf("%d", &n);
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < n; j++) 
+        {
+            scanf("%d", &net[i][j]);
+        }
+    }
+    for(int i = 0; i < n; i++) //从边界开始深度搜索
+    {
+        if(net[0][i] == 0 && visited[0][i] ==0)   //上边界
+        {
+            dfs_stack(0, i);
+        }
+        if(net[n-1][i] == 0 && visited[n-1][i] ==0) //下边界
+        {
+            dfs_stack(n-1, i);
+        }
+        if(net[i][0] == 0 && visited[i][0] ==0)  //左边界
+        {
+            dfs_stack(i, 0);
+        }
+        if(net[i][n-1] == 0 && visited[i][n-1] ==0)  //右边界
+        {
+            dfs_stack(i, n-1);
+        }
+    }
+    for (int i = 0; i < n; i++) {           //输出格式
+        for (int j = 0; j < n; j++) 
+        {
+            if(net[i][j] == 0 && visited[i][j] !=1)
+            {
+                printf("2 ");
+            }
+            else
+            {
+                printf("%d ", net[i][j]);
+            }
+        }
+        printf("\n");
+    }
+}
