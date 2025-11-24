@@ -5,7 +5,7 @@ int net[MAX][MAX];  //初始格子
 int visited[MAX][MAX] = {0};  // 标记访问
 int dx[4] = {-1, 1, 0, 0};  //方向数组
 int dy[4] = {0, 0, 1, -1};
-void  dfs(int x, int y)
+void  dfs(int x, int y)    //dfs函数递归的调用
 {
     if(x < 0 || x >= n || y < 0 || y >= n) return;
     if( net[x][y] == 1 || visited[x][y] == 1 ) return ;
@@ -20,7 +20,7 @@ void  dfs(int x, int y)
 int main()
 {
     scanf("%d", &n);
-    for(int i = 0; i < n; i++)
+    for(int i = 0; i < n; i++)   // 初始化网格
     {
         for(int j = 0; j < n; j++)
         {
@@ -38,7 +38,7 @@ int main()
         if(net[i][n-1] ==0 && visited[i][n-1] !=1 ) //有边界开始
             dfs(i, n-1);
     }
-    for(int i = 0; i < n; i++)
+    for(int i = 0; i < n; i++)     //没有被访问的网格就是内部局域，要变成2
     {
         for(int j = 0; j < n; j++)
         {
