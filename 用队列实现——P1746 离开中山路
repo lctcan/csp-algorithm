@@ -1,0 +1,56 @@
+#include<stdio.h>
+char map[1005][1005];  //地图
+int dx[4] = {-1,1,0,0};  //方向数组
+int dy[4] = {0,0,-1,1};
+int visited[1005][1005];  //访问数组，n的最大是1000
+int queue_x[1000005];  //队列，队列大小是1000005 是因为最坏情况下可能会存贮每一层的每一个x节点  
+int queue_y[1000005]; 
+int front = 0, rear = 0;
+
+int main()
+{
+    int n;
+    scanf("%d",&n);
+    for(int i = 1; i <=n; i++)  //输入起始地图
+    {
+        scanf("%s",map[i] + 1);
+    }
+    int start_x,start_y,end_x,end_y;    // 输入起始坐标
+    scanf("%d %d %d %d",&start_x, &start_y, &end_x, &end_y);
+     for(int i = 1; i <= n; i++)  //遍历访问数组为-1，因为rear和front初始化都是0，为了更好判断
+    {
+        for(int j = 1; j <= n; j++)
+        {
+            visited[i][j] = -1;
+        }
+    }
+    queue_x[rear] = start_x;   //起始坐标入队
+    queue_y[rear] = start_y;
+    rear++;
+    visited[start_x][start_y] = 0;
+   
+    while(front< rear)   // 开始BFS搜索
+    {
+        int x = queue_x[front];
+        int y = queue_y[front];
+        front++;
+        if(x == end_x && y == end_y)  //达到终点时结束
+        {
+            printf("%d",visited[x][y]);
+            return 0;
+        }
+        for(int i = 0; i < 4; i++)  //遍历新坐标4个方向
+        {
+            int nx = dx[i] + x;
+            int ny = dy[i] + y;
+            if(nx >=1 && nx <= n && ny >=1 && ny <= n && map[nx][ny] == '0' && visited[nx][ny] == -1)   // 检查边界并且起始地图是0并且未被访问过
+            {
+                visited[nx][ny] = visited[x][y] +1;
+                queue_x[rear] = nx;
+                queue_y[rear] = ny;
+                rear++;
+            }
+        }
+    }
+    return 0;
+}
