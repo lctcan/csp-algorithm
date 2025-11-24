@@ -1,2 +1,2 @@
 # csp-algorithm
-csp算法标准解法
+csp算法题标准解法
